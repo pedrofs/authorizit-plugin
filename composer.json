@@ -1,0 +1,16 @@
+{
+    "name": "authorizit/authorizit-plugin",
+    "type": "cakephp-plugin",
+    "keywords": ["cakephp", "authorizit", "authorization", "authorize", "auth"],
+    "description": "CakePHP plugin to support Authorizit. See http://www.github.com/pedrofs/authorizit",
+    "license": "UNLICENSE",
+    "authors": [
+        {
+            "name": "Pedro Fernandes SteimbruchPedro F Steimbruch",
+            "email": "pedrofsteimbruch@gmail.com"
+        }
+    ],
+    "require": {
+        "authorizit/authorizit": "1.0.0"
+    }
+}
