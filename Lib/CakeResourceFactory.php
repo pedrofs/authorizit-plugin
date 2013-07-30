@@ -1,7 +1,5 @@
 <?php
-namespace Authorizit\Resource\Factory;
-
-use Authorizit\Resource\CakeResource;
+App::uses('CakeResource', 'AuthorizitPlugin.Lib');
 
 class CakeResourceFactory
 {

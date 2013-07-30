@@ -1,6 +1,4 @@
 <?php
-namespace Authorizit\Resource;
-
 class CakeResource implements ResourceInterface
 {
     private $resource;
@@ -21,9 +19,9 @@ class CakeResource implements ResourceInterface
 
     public function checkProperties($conditions)
     {
-        $data = $this->read();
+        $data = $this->resource->read();
         foreach ($conditions as $attr => $value) {
-            if ($data[$attr] != $value) {
+            if ($data[$this->resource->alias][$attr] != $value) {
                 return false;
             }
         }
