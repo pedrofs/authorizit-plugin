@@ -1,6 +1,7 @@
 <?php
 App::uses('CakeResourceFactory', 'AuthorizitPlugin.Lib');
 App::uses('CakeModelAdapter', 'AuthorizitPlugin.Lib');
+App::uses('AuthorizitWrapper', 'AuthorizitPlugin.Lib');
 
 class AuthorizitComponent extends Component
 {
@@ -19,18 +20,34 @@ class AuthorizitComponent extends Component
     {
         $user = $this->controller->Session->read('Auth.User');
 
-        $this->authorizit = new $this->authorizitClass(
+        $authorizit = new $this->authorizitClass(
             $user,
             new CakeResourceFactory()
         );
 
-        $this->authorizit->setModelAdapter();
+        $authorizit->setModelAdapter(new CakeModelAdapter());
 
-        $this->authorizit->init();
+        $authorizit->init();
+
+        AuthorizitWrapper::setAuthorizit($authorizit);
     }
 
     public function load($resourceClass)
     {
-        $this->authorizit->loadResources($resourceClass);
+        return AuthorizitWrapper::loadResources($resourceClass);
+    }
+
+    public function authorize($action, $resource)
+    {
+        if (! AuthorizitWrapper::check($action, $resource)) {
+            throw new ForbiddenException(__('You don\'t have permission to access this resource.'));
+        }
+
+        return true;
+    }
+
+    public function check($action, $resource)
+    {
+        return AuthorizitWrapper::check($action, $resource);
     }
 }

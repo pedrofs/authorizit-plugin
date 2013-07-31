@@ -7,8 +7,8 @@ class CakeModelAdapter implements ModelAdapterInterface
 
     public function loadResources($rules)
     {
-        $this->setJoins();
-        $this->setconditions();
+        $this->setJoins($rules);
+        $this->setConditions($rules);
 
         return $this->loader;
     }
@@ -20,15 +20,20 @@ class CakeModelAdapter implements ModelAdapterInterface
 
     private function setConditions($rules)
     {
+        $this->loader['conditions'] = array();
+
         foreach ($rules as $rule) {
             $ruleConditions = $rule->getConditions();
 
-            if (!empty($ruleConditions)) {
-                $this->loader['conditions'] = array_merge(
-                    $this->loader['conditions'],
-                    $ruleConditions
-                );
+            if (empty($ruleConditions)) {
+                $this->loader['conditions'] = array();
+                return;
             }
+
+            $this->loader['conditions'] = array_merge(
+                $this->loader['conditions'],
+                $ruleConditions
+            );
         }
     }
 }
