@@ -23,11 +23,14 @@ class CakeResource implements ResourceInterface
     {
         $data = $this->resource->read();
 
-        foreach ($conditions as $attr => $value) {
-            if ($data[$this->resource->alias][$attr] != $value) {
-                return false;
-            }
+	if ($data) {
+		foreach ($conditions as $attr => $value) {
+		    if ($data[$this->resource->alias][$attr] != $value) {
+			return false;
+		    }
+		}
         }
+
 
         return true;
     }
