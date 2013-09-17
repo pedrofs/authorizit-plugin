@@ -2,6 +2,7 @@
 class CakeFakeModelWrapper
 {
     public $alias;
+    public $id;
     private $data;
 
     public function __construct($modelAlias, $resource)
@@ -10,7 +11,7 @@ class CakeFakeModelWrapper
         $this->data  = $resource;
     }
 
-    public function read()
+    public function find($type, $options)
     {
         return $this->data;
     }

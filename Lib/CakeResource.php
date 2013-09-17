@@ -21,16 +21,15 @@ class CakeResource implements ResourceInterface
 
     public function checkProperties($conditions)
     {
-        $data = $this->resource->read();
+        $data = $this->resource->find('first', array('id' => $this->resource->id));
 
-	if ($data) {
-		foreach ($conditions as $attr => $value) {
-		    if ($data[$this->resource->alias][$attr] != $value) {
-			return false;
-		    }
-		}
+    	if ($data) {
+    		foreach ($conditions as $attr => $value) {
+                if ($data[$this->resource->alias][$attr] != $value) {
+                    return false;
+    		    }
+            }
         }
-
 
         return true;
     }
