@@ -21,7 +21,11 @@ class CakeResource implements ResourceInterface
 
     public function checkProperties($conditions)
     {
-        $data = $this->resource->find('first', array('id' => $this->resource->id));
+        $data = $this->resource->find('first', array(
+            'conditions' => array(
+                'id' => $this->resource->id
+            ))
+        );
 
     	if ($data) {
     		foreach ($conditions as $attr => $value) {
