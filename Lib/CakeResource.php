@@ -23,7 +23,7 @@ class CakeResource implements ResourceInterface
     {
         $data = $this->resource->find('first', array(
             'conditions' => array(
-                'id' => $this->resource->id
+                "{$this->resource->alias}.id" => $this->resource->id
             ))
         );
 
