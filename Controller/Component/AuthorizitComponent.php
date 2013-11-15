@@ -5,6 +5,27 @@ App::uses('AuthorizitWrapper', 'AuthorizitPlugin.Lib');
 
 class AuthorizitComponent extends Component
 {
+
+    public $defaultSettings = array(
+        'defaultMap' => true,
+    );
+
+    protected $defaultMap = array(
+        'admin_index' => 'read',
+        'admin_add' => 'add',
+        'admin_view' => 'read',
+        'admin_edit' => 'update',
+        'admin_delete' => 'delete'
+    );
+
+    public function __construct(ComponentCollection $collection, $settings = array()) {
+        parent::__construct($collection, $settings);
+        $this->settings = array_merge(
+            $this->defaultSettings,
+            $settings
+        );
+    }
+
     public function initialize(Controller $controller)
     {
         $this->controller = $controller;
@@ -34,6 +55,18 @@ class AuthorizitComponent extends Component
         $authorizit->init();
 
         AuthorizitWrapper::setAuthorizit($authorizit);
+
+        if ($this->settings['defaultMap']) {
+            $this->mayUserAccess($controller);
+        }
+    }
+
+    public function mayUserAccess(Controller $controller)
+    {
+        $action = $this->defaultMap[$controller->params['action']];
+        if (!$this->check($action, $controller->{$controller->modelClass})) {
+            throw new UnauthorizedException('Access denied.');
+        }        
     }
 
     public function load($resourceClass)
