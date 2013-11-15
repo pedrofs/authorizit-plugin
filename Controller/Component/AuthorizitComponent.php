@@ -63,7 +63,18 @@ class AuthorizitComponent extends Component
 
     public function mayUserAccess(Controller $controller)
     {
-        $action = $this->defaultMap[$controller->params['action']];
+        $action = $controller->params['action'];
+
+        if (!isset($this->defaultMap[$action])) {
+            return;
+        }
+
+        if (isset($controller->Auth) && in_array($action, $controller->Auth->allowedActions)) {
+            return;
+        }
+
+        $action = $this->defaultMap[$action];
+
         if (!$this->check($action, $controller->{$controller->modelClass})) {
             throw new UnauthorizedException('Access denied.');
         }        
