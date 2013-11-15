@@ -5,14 +5,39 @@ App::uses('AuthorizitWrapper', 'AuthorizitPlugin.Lib');
 
 class AuthorizitComponent extends Component
 {
+
+    public $defaultSettings = array(
+        'defaultMap' => true,
+    );
+
+    protected $defaultMap = array(
+        'admin_index' => 'read',
+        'admin_add' => 'add',
+        'admin_view' => 'read',
+        'admin_edit' => 'update',
+        'admin_delete' => 'delete'
+    );
+
+    public function __construct(ComponentCollection $collection, $settings = array()) {
+        parent::__construct($collection, $settings);
+        $this->settings = array_merge(
+            $this->defaultSettings,
+            $settings
+        );
+    }
+
     public function initialize(Controller $controller)
     {
         $this->controller = $controller;
+        $dirAndClassName = $this->settings['class'];
 
-        $dirAndClassName        = explode('.', $this->settings['class']);
-        $dirToLoad              = $dirAndClassName[0];
-        $this->authorizitClass  = $dirAndClassName[1];
-
+        if (is_string($this->settings['class'])) {
+            $dirAndClassName = explode('.', $this->settings['class']);
+        }
+        
+        $dirToLoad = $dirAndClassName[0];
+        $this->authorizitClass = $dirAndClassName[1];        
+        
         App::uses($this->authorizitClass, $dirToLoad);
     }
 
@@ -30,6 +55,29 @@ class AuthorizitComponent extends Component
         $authorizit->init();
 
         AuthorizitWrapper::setAuthorizit($authorizit);
+
+        if ($this->settings['defaultMap']) {
+            $this->mayUserAccess($controller);
+        }
+    }
+
+    public function mayUserAccess(Controller $controller)
+    {
+        $action = $controller->params['action'];
+
+        if (!isset($this->defaultMap[$action])) {
+            return;
+        }
+
+        if (isset($controller->Auth) && in_array($action, $controller->Auth->allowedActions)) {
+            return;
+        }
+
+        $action = $this->defaultMap[$action];
+
+        if (!$this->check($action, $controller->{$controller->modelClass})) {
+            throw new UnauthorizedException('Access denied.');
+        }        
     }
 
     public function load($resourceClass)
