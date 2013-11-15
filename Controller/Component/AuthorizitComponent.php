@@ -8,11 +8,15 @@ class AuthorizitComponent extends Component
     public function initialize(Controller $controller)
     {
         $this->controller = $controller;
+        $dirAndClassName = $this->settings['class'];
 
-        $dirAndClassName        = explode('.', $this->settings['class']);
-        $dirToLoad              = $dirAndClassName[0];
-        $this->authorizitClass  = $dirAndClassName[1];
-
+        if (is_string($this->settings['class'])) {
+            $dirAndClassName = explode('.', $this->settings['class']);
+        }
+        
+        $dirToLoad = $dirAndClassName[0];
+        $this->authorizitClass = $dirAndClassName[1];        
+        
         App::uses($this->authorizitClass, $dirToLoad);
     }
 
