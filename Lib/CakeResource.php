@@ -12,10 +12,6 @@ class CakeResource implements ResourceInterface
 
     public function getClass()
     {
-        if (is_string($this->resource)) {
-            return $this->resource;
-        }
-
         return $this->resource->alias;
     }
 
@@ -27,14 +23,19 @@ class CakeResource implements ResourceInterface
             ))
         );
 
-    	if ($data) {
-    		foreach ($conditions as $attr => $value) {
+        if ($data) {
+            foreach ($conditions as $attr => $value) {
                 if ($data[$this->resource->alias][$attr] != $value) {
                     return false;
-    		    }
+                }
             }
         }
 
         return true;
+    }
+
+    public function getResource()
+    {
+        return $this->resource;
     }
 }

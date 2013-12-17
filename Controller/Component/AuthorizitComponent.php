@@ -75,7 +75,9 @@ class AuthorizitComponent extends Component
 
         $action = $this->defaultMap[$action];
 
-        if (!$this->check($action, $controller->{$controller->modelClass})) {
+        return;
+
+        if (!$this->check($action, array(), get_class($controller->{$controller->modelClass}))) {
             throw new UnauthorizedException('Access denied.');
         }        
     }
@@ -83,6 +85,11 @@ class AuthorizitComponent extends Component
     public function load($resourceClass)
     {
         return AuthorizitWrapper::loadResources($resourceClass);
+    }
+
+    public function authorizeResources($action, $resourcesData, $modelAlias = false)
+    {
+        return AuthorizitWrapper::authorizeResources($action, $resourcesData, $modelAlias);
     }
 
     public function authorize($action, $resource)
@@ -94,8 +101,8 @@ class AuthorizitComponent extends Component
         return true;
     }
 
-    public function check($action, $resource)
+    public function check($action, $resource, $modelAlias = false)
     {
-        return AuthorizitWrapper::check($action, $resource);
+        return AuthorizitWrapper::check($action, $resource, $modelAlias);
     }
 }

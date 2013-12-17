@@ -1,9 +1,11 @@
 <?php
 App::uses('CakeResource', 'AuthorizitPlugin.Lib');
 
-class CakeResourceFactory
+use Authorizit\Resource\Factory\AbstractResourceFactory;
+
+class CakeResourceFactory extends AbstractResourceFactory
 {
-    public function get($resource)
+    public function getInstance($resource)
     {
         return new CakeResource($resource);
     }

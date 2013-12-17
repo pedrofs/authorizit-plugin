@@ -10,7 +10,22 @@ class AuthorizitWrapper
         self::$authorizit = $authorizit;
     }
 
-    static public function check($action, $resource, $modelAlias = null)
+    static public function authorizeResources($action, $resourcesData, $modelAlias = false)
+    {
+        self::checkAuthorizit();
+
+        $authorizedResources = array();
+
+        foreach ($resourcesData as $resourceData) {
+            if (self::check($action, $resourceData, $modelAlias)) {
+                $authorizedResources[] = $resourceData;
+            }
+        }
+
+        return $authorizedResources;
+    }
+
+    static public function check($action, $resource, $modelAlias = false)
     {
         self::checkAuthorizit();
 
