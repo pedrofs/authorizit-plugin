@@ -7,10 +7,10 @@ class AuthorizitComponent extends Component
 {
 
     public $defaultSettings = array(
-        'defaultMap' => true,
+        'autoCheck' => true,
     );
 
-    protected $defaultMap = array(
+    protected $autoCheckMap = array(
         'admin_index' => 'read',
         'admin_add' => 'add',
         'admin_view' => 'read',
@@ -56,7 +56,7 @@ class AuthorizitComponent extends Component
 
         AuthorizitWrapper::setAuthorizit($authorizit);
 
-        if ($this->settings['defaultMap']) {
+        if ($this->settings['autoCheck']) {
             $this->mayUserAccess($controller);
         }
     }
@@ -65,7 +65,7 @@ class AuthorizitComponent extends Component
     {
         $action = $controller->params['action'];
 
-        if (!isset($this->defaultMap[$action])) {
+        if (!isset($this->autoCheckMap[$action])) {
             return;
         }
 
@@ -73,11 +73,9 @@ class AuthorizitComponent extends Component
             return;
         }
 
-        $action = $this->defaultMap[$action];
+        $action = $this->autoCheckMap[$action];
 
-        return;
-
-        if (!$this->check($action, array(), get_class($controller->{$controller->modelClass}))) {
+        if (!$this->check($action, $controller->{$controller->modelClass}->alias)) {
             throw new UnauthorizedException('Access denied.');
         }        
     }
