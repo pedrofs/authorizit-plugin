@@ -34,10 +34,10 @@ class AuthorizitComponent extends Component
         if (is_string($this->settings['class'])) {
             $dirAndClassName = explode('.', $this->settings['class']);
         }
-        
+
         $dirToLoad = $dirAndClassName[0];
-        $this->authorizitClass = $dirAndClassName[1];        
-        
+        $this->authorizitClass = $dirAndClassName[1];
+
         App::uses($this->authorizitClass, $dirToLoad);
     }
 
@@ -69,7 +69,7 @@ class AuthorizitComponent extends Component
             return;
         }
 
-        if (isset($controller->Auth) && in_array($action, $controller->Auth->allowedActions)) {
+        if ($this->isActionAllowed($controller, $action) || !$this->isUserLogged($controller)) {
             return;
         }
 
@@ -77,7 +77,17 @@ class AuthorizitComponent extends Component
 
         if (!$this->check($action, $controller->{$controller->modelClass}->alias)) {
             throw new UnauthorizedException('Access denied.');
-        }        
+        }
+    }
+
+    private function isActionAllowed(Controller $controller, $action)
+    {
+        return isset($controller->Auth) && in_array($action, $controller->Auth->allowedActions);
+    }
+
+    private function isUserLogged(Controller $controller)
+    {
+        return isset($controller->Auth) && $controller->Auth->user('id') !== null;
     }
 
     public function load($resourceClass)
