@@ -72,6 +72,10 @@ class AuthorizitComponent extends Component
         if (isset($controller->Auth) && in_array($action, $controller->Auth->allowedActions)) {
             return;
         }
+        
+        if (isset($controller->Auth) && $controller->Auth->user('id') === null) {
+            return;
+        }        
 
         $action = $this->autoCheckMap[$action];
 
