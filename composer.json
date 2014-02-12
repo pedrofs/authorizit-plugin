@@ -12,6 +12,6 @@
     ],
     "require": {
         "composer/installers": "1.0.*",
-        "authorizit/authorizit": "dev-develop"
+        "authorizit/authorizit": "1.0.1"
     }
 }
