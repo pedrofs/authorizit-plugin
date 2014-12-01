@@ -12,7 +12,7 @@ class AuthorizitComponent extends Component
 
     protected $autoCheckMap = array(
         'admin_index' => 'read',
-        'admin_add' => 'add',
+        'admin_add' => 'create',
         'admin_view' => 'read',
         'admin_edit' => 'update',
         'admin_delete' => 'delete'
